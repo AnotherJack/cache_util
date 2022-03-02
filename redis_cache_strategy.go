@@ -25,13 +25,13 @@ func (r *redisCacheStrategy) Get(ctx context.Context, key string, resType reflec
 		return nil, err
 	}
 
-	res := reflect.New(resType).Elem().Interface()
+	resPtrValue := reflect.New(resType)
 
-	err = json.Unmarshal([]byte(cachedJson), &res)
+	err = json.Unmarshal([]byte(cachedJson), resPtrValue.Interface())
 	if err != nil {
 		return nil, err
 	}
-	return res, nil
+	return resPtrValue.Elem().Interface(), nil
 }
 
 type RedisClient interface {
