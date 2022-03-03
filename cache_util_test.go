@@ -19,12 +19,11 @@ func TestCacheUtil_GetWithCache(t *testing.T) {
 	myRC := &myRedisClient{rdb: rdb}
 	cUtil := NewCacheUtil(NewRedisCacheStrategy(myRC))
 	for i := 0; i < 10; i++ {
-		var numInt int64
-		num, err := cUtil.GetWithCache(context.Background(), "asd", reflect.TypeOf(numInt), time.Second*200, func() (interface{}, error) {
+		num, err := cUtil.GetWithCache(context.Background(), "asd", reflect.TypeOf(""), time.Second*200, func() (interface{}, error) {
 			r := RandInt64WithinRange(1, 100)
 			fmt.Printf("f executed, r is %v \n", r)
 			// 生成一个随机数
-			return r, nil
+			return fmt.Sprint(r), nil
 		})
 		if err != nil {
 			panic(err)
